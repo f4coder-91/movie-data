@@ -1,3 +1,5 @@
+"use strict";
+
 let movieData = {
   "The Darjeeling Limited": {
     plot: "A year after their father's funeral, three brothers travel across India by train in an attempt to bond with each other.",
@@ -39,32 +41,29 @@ let movieData = {
 };
 // Dom
 const container = document.querySelector(".movies");
+const form = document.querySelector(".movie");
 const title = document.querySelector("#title");
 const year = document.querySelector("#year");
 const rating = document.querySelector("#rating");
-// const r = document.getElementById("link");
+const imageLink = document.querySelector("#link");
+const sortBtnUp = document.querySelector(".btn__up");
+const sortBtnDown = document.querySelector(".btn__down");
 let newMovie = [];
-const form = document.querySelector(".movie");
-form.addEventListener("click", (e) => {
-  e.preventDefault();
-  console.log(title.value);
-  let newUpdatedMovie = {
-    title: title.value,
-    year: year.value,
-    ratings: rating.value,
-  };
+let newMovieObj;
+// movieData;
+// let htmlMarkup;
 
-  newMovie.push(newUpdatedMovie);
-});
-let htmlMarkup;
-console.log(newMovie);
-// loop throught the object
-// const newMovie
-// console.log(Object.values(movieData));
 const movie = Object.entries(movieData);
-
-// console.log(movie);
-// console.log(movie);
+// movie.forEach((movie, i) => {
+//   newMovie.push({
+//     title: movie[i][0],
+//     plots: movie[i][1].plot,
+//     year: movie[i][1].year,
+//     ratings: movie[i][1].rating,
+//     images: movie[i][1].link,
+//   });
+// });
+console.log(newMovie);
 for (let i = 0; i < movie.length; i++) {
   newMovie.push({
     title: movie[i][0],
@@ -74,10 +73,62 @@ for (let i = 0; i < movie.length; i++) {
     images: movie[i][1].link,
   });
 }
+const AddMovie = () => {
+  let newUpdatedMovie = [];
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    // console.log(title.value);
+    newUpdatedMovie = {
+      title: title.value,
+      year: Number(year.value),
+      ratings: rating.value,
+      // plot: "something about the movie",
+      images: imageLink.value,
+    };
 
-newMovie.map((movie) => {
-  // console.log(movie.plots);
-  htmlMarkup = `
+    localStorage.setItem("newMovie", JSON.stringify(newUpdatedMovie));
+    newMovie.push(newUpdatedMovie);
+    console.log(newMovie);
+    const htmlMarkup = `
+    <div class="card">
+        <img
+          src="${newUpdatedMovie.images}"
+          alt="movie poster"
+        />
+        <h3 class="title">${newUpdatedMovie.title}</h3>
+        <p class="plot">
+          ${newUpdatedMovie.plot}
+        </p>
+        <span class="year">${newUpdatedMovie.year}</span>
+        <span class="rating"> <ion-icon name="star"></ion-icon>${newUpdatedMovie.ratings} </span>
+    </div>
+
+  `;
+    container.insertAdjacentHTML("beforeend", htmlMarkup);
+
+    title.value = "";
+    year.value = "";
+    rating.value = "";
+    imageLink.value = "";
+  });
+};
+AddMovie();
+// localStorage.clear();
+// local storage
+const savedNewMovie = JSON.parse(localStorage.getItem("newMovie"));
+if (savedNewMovie) newMovie.push(savedNewMovie);
+
+let sorted = false;
+
+// movie dom handler
+
+const MovieHandler = (movieARR, sort = false) => {
+  container.innerHTML = "";
+  const movies = sort
+    ? movieARR.slice().sort((a, b) => (a.year > b.year ? 1 : -1))
+    : movieARR;
+  movies.forEach((movie) => {
+    const htmlMarkup = `
           <div class="card">
               <img
                 src="${movie.images}"
@@ -92,8 +143,25 @@ newMovie.map((movie) => {
           </div>
   
   `;
-  container.insertAdjacentHTML("afterbegin", htmlMarkup);
-});
-// console.log(newMovie);
+    container.insertAdjacentHTML("beforeend", htmlMarkup);
+  });
+};
 
+MovieHandler(newMovie);
+// ---------------------------------
+function sortFunc() {
+  // const sorted = newMovie.;
+  MovieHandler(newMovie, !sorted);
+  sorted = !sorted;
+  console.log(sorted, "------", newMovie);
+}
+
+sortBtnUp.addEventListener("click", sortFunc);
+
+const sortFuncUp = () => {
+  let sortARRNew = newMovie.slice().sort((a, b) => (b.year > a.year ? 1 : -1));
+  MovieHandler(sortARRNew, !sorted);
+  sorted = !sorted;
+};
 // console.log(typeof movieData);
+sortBtnDown.addEventListener("click", sortFuncUp);

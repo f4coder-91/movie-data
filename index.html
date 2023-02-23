@@ -6,24 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script> -->
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
   </head>
   <body>
     <div class="container">
       <form class="movie">
         <h2>Add Movie</h2>
         <label for="title">Title:</label>
-        <input type="text" id="title" placeholder="terminator 2" />
+        <input type="text" id="title" placeholder="terminator 2" required />
         <label for="year">Year:</label>
-        <input type="number" id="year" />
+        <input type="number" id="year" required />
         <label for="rating">Rating:</label>
-        <input type="number" id="rating" placeholder="7.2" />
+        <input type="number" id="rating" placeholder="7.2" required />
         <label for="link">Image link</label>
-        <input type="text" name="#" id="link" />
-        <button>Add movie</button>
+        <input type="link" name="#" id="link" required />
+        <button class="add">Add movie</button>
       </form>
+      <div class="sortn">
+        <span>Sort by Year</span>
+        <button type="button" class="sort btn__up">
+          <ion-icon name="arrow-up"></ion-icon>
+        </button>
+        <button type="button" class="sort btn__down">
+          <ion-icon name="arrow-down"></ion-icon>
+        </button>
+      </div>
     </div>
     <h1>Movies</h1>
+
     <div class="movies">
       <!-- <div class="card">
         <img
